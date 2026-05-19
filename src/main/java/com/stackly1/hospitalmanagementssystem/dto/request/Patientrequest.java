@@ -9,4 +9,5 @@ public class Patientrequest {
 	private String gender;
 	private String ph_number;
 
+
 }

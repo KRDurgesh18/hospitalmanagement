@@ -2,11 +2,33 @@ package com.stackly1.hospitalmanagementssystem.dto.request;
 
 import java.time.LocalDate;
 
-import lombok.Data;
-
-@Data
 public class Appointmentrequest {
-         private Integer doctor_id;
-         private Integer patient_id;
-         private LocalDate appoinment_date;
+
+    private Integer doctorId;
+    private Integer patientId;
+    private LocalDate appointmentDate;
+
+    public Integer getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(Integer doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    public Integer getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Integer patientId) {
+        this.patientId = patientId;
+    }
+
+    public LocalDate getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(LocalDate appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
 }

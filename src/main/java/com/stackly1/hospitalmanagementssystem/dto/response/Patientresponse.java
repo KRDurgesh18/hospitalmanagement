@@ -4,9 +4,10 @@ import lombok.Data;
 
 @Data
 public class Patientresponse {
-	private Integer id;
+
 	private String name;
 	private String age;
+	private Integer patient_id;
 	private String gender;
 	private String ph_number;
 }
