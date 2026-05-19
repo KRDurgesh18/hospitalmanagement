@@ -1,39 +1,26 @@
-package com.stackly1.hospitalmanagementssystem.dto.response;
+package com.stackly1.hospitalmanagementssystem.dto.request;
 
-public class Patientresponse {
+import lombok.*;
 
-    private Long id;
-    private String uid;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Patientrequest {
+
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
+    private String password;
     private Integer age;
     private String gender;
     private String bloodGroup;
     private String address;
     private String emergencyContact;
-    private String status;
 
-    public Patientresponse() {
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
+//    public Patientrequest() {
+//
+//    }
 
     public String getFirstName() {
         return firstName;
@@ -65,6 +52,14 @@ public class Patientresponse {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Integer getAge() {
@@ -105,13 +100,5 @@ public class Patientresponse {
 
     public void setEmergencyContact(String emergencyContact) {
         this.emergencyContact = emergencyContact;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }
