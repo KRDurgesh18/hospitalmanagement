@@ -14,12 +14,12 @@ import lombok.Data;
 public class Patient {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	private String name;
 	private int age;
 	private String Gender;
 	private String ph_number;
-	@OneToMany(mappedBy = "patient_id")
+	@OneToMany(mappedBy = "patientId")
 	private List<Appointment> appointments;
 
 }
