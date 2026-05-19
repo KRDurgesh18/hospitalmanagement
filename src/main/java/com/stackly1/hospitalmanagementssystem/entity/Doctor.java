@@ -10,7 +10,7 @@ public class Doctor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;    //id
 
     private String doctorName;
     private String specialization;
