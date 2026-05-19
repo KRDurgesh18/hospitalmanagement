@@ -1,9 +1,9 @@
 package com.stackly1.hospitalmanagementssystem.repository;
 
+import com.stackly1.hospitalmanagementssystem.entity.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.stackly1.hospitalmanagementssystem.entity.Patient;
+public interface Patientrepository extends JpaRepository<Patient, Long> {
 
-public interface Patientrepository extends JpaRepository<Patient, Integer> {
-
+    boolean existsByEmail(String email);
 }
