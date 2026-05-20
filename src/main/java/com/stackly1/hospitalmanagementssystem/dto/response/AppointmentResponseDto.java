@@ -1,18 +1,19 @@
-package com.stackly1.hospitalmanagementssystem.dto.request;
+package com.stackly1.hospitalmanagementssystem.dto.response;
 
 import java.time.LocalDateTime;
 
-public class Appointmentrequest {
-	private Long patientId; 
-	private Long doctorId;
+public class AppointmentResponseDto {
+    private Long id;
+    private Long patientId;
+    private Long doctorId;
     private LocalDateTime appointmentDate;
     private String reason;
     private String status;
 
-    // Default constructor
-    public Appointmentrequest() {}
-
     // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
     public Long getPatientId() { return patientId; }
     public void setPatientId(Long patientId) { this.patientId = patientId; }
 
