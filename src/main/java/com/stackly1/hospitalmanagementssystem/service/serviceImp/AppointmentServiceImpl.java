@@ -10,6 +10,8 @@ import com.stackly1.hospitalmanagementssystem.dto.request.Appointmentrequest;
 import com.stackly1.hospitalmanagementssystem.dto.response.AppointmentResponseDto;
 import com.stackly1.hospitalmanagementssystem.entity.Appointment;
 import com.stackly1.hospitalmanagementssystem.repository.AppointmentRepository;
+import com.stackly1.hospitalmanagementssystem.repository.Doctorrepository;
+import com.stackly1.hospitalmanagementssystem.repository.Patientrepository;
 import com.stackly1.hospitalmanagementssystem.service.Appointmentservice;
 
 @Service
@@ -17,9 +19,25 @@ public class AppointmentServiceImpl implements Appointmentservice {
 
     @Autowired
     private AppointmentRepository appointmentRepository;
+    @Autowired
+    private Patientrepository patientRepository; // Injected to verify patient exists
+
+    @Autowired
+    private Doctorrepository doctorRepository; // Injected to verify doctor exists
 
     @Override
     public AppointmentResponseDto bookAppointment(Appointmentrequest requestDto) {
+    	
+    	boolean patientExists = patientRepository.existsById(requestDto.getPatientId());
+        if (!patientExists) {
+            throw new RuntimeException("Cannot book appointment. Patient not found with ID: " + requestDto.getPatientId());
+        }
+
+        // 2. Verify Doctor exists in the database
+        boolean doctorExists = doctorRepository.existsById(requestDto.getDoctorId());
+        if (!doctorExists) {
+            throw new RuntimeException("Cannot book appointment. Doctor not found with ID: " + requestDto.getDoctorId());
+        }
         Appointment appointment = new Appointment();
         appointment.setPatientId(requestDto.getPatientId());
         appointment.setDoctorId(requestDto.getDoctorId());
