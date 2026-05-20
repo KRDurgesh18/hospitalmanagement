@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 @Data
@@ -16,6 +18,10 @@ public class Appointment {
    private int id;
     private String status;
     private LocalDate appointment_date;
-    private Doctor doctor_id;
-    private Patient patient_id;
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
 }

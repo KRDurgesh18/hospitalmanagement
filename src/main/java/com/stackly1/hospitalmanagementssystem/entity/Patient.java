@@ -1,5 +1,6 @@
 package com.stackly1.hospitalmanagementssystem.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -15,11 +16,22 @@ public class Patient {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String name;
-	private int age;
-	private String Gender;
-	private String ph_number;
-	@OneToMany(mappedBy = "patient_id")
-	private List<Appointment> appointments;
-
+	private String uid;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String phoneNumber;
+    private String password;
+    private Integer age;
+    private String gender; 
+    private String bloodGroup;
+    private String address;
+    private String emergencyContact;
+    private String status;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    @OneToMany(mappedBy = "patient")
+    private List<Appointment> appointments;
+    
+	
 }

@@ -12,13 +12,18 @@ import lombok.Data;
 @Data
 @Entity
 public class Doctor {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	private String name;
-	private String specialization;
-	private String ph_number;
-	@OneToMany(mappedBy = "doctor_id")
-	private List<Appointment> appointments;
-	
+    private int id;
+
+    private String name;
+
+    private String specialization;
+
+    private String ph_number;
+
+    @OneToMany(mappedBy = "doctor")
+    private List<Appointment> appointments;
+
 }
