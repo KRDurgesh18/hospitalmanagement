@@ -4,7 +4,10 @@ import lombok.Data;
 
 @Data
 public class Commonresponse {
-                 String statuscode;
-                 String message;
-                 Object data;
+
+    private String statuscode;
+
+    private String message;
+
+    private Object data;
 }
