@@ -1,0 +1,8 @@
+package com.stackly1.hospitalmanagementssystem.exception;
+
+public class PatientNotFoundException extends RuntimeException {
+
+    public PatientNotFoundException(String message) {
+        super(message);
+    }
+}
