@@ -1,7 +1,5 @@
 package com.stackly1.hospitalmanagementssystem.controller;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stackly1.hospitalmanagementssystem.common.Commonresponse;
 import com.stackly1.hospitalmanagementssystem.dto.request.Doctorrequest;
-import com.stackly1.hospitalmanagementssystem.dto.response.Doctorresponse;
 import com.stackly1.hospitalmanagementssystem.service.Doctorservice;
 
 import lombok.RequiredArgsConstructor;
@@ -32,250 +30,274 @@ public class Doctorcontroller {
     // =====================================================
     // ADD DOCTOR
     // POST /api/doctors
+    // SUCCESS  → 201 Created
+    // FAIL     → 400 Bad Request (duplicate email/phone)
     // =====================================================
     @PostMapping
-    public ResponseEntity<Doctorresponse> addDoctor(
+    public ResponseEntity<Commonresponse> addDoctor(
             @RequestBody Doctorrequest doctorrequest) {
 
-        Doctorresponse response =
-                doctorService.addDoctor(doctorrequest);
-
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(response);
+                .status(HttpStatus.CREATED)         // 201
+                .body(Commonresponse.created(
+                        "Doctor added successfully",
+                        doctorService.addDoctor(doctorrequest)));
     }
 
     // =====================================================
     // GET ALL DOCTORS
     // GET /api/doctors
+    // SUCCESS → 200 OK
     // =====================================================
     @GetMapping
-    public ResponseEntity<List<Doctorresponse>> getAllDoctors() {
+    public ResponseEntity<Commonresponse> getAllDoctors() {
 
-        List<Doctorresponse> doctors =
-                doctorService.getAllDoctors();
-
-        return ResponseEntity.ok(doctors);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "All doctors fetched successfully",
+                        doctorService.getAllDoctors()));
     }
 
     // =====================================================
     // GET DOCTOR BY ID
     // GET /api/doctors/{id}
+    // SUCCESS → 200 OK
+    // FAIL    → 404 Not Found
     // =====================================================
     @GetMapping("/{id}")
-    public ResponseEntity<Doctorresponse> getDoctorById(
+    public ResponseEntity<Commonresponse> getDoctorById(
             @PathVariable Long id) {
 
-        Doctorresponse response =
-                doctorService.getDoctorById(id);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "Doctor fetched successfully",
+                        doctorService.getDoctorById(id)));
     }
 
     // =====================================================
     // GET DOCTORS BY SPECIALIZATION
     // GET /api/doctors/specialization?type=Cardiology
+    // SUCCESS → 200 OK
+    // FAIL    → 404 Not Found
     // =====================================================
     @GetMapping("/specialization")
-    public ResponseEntity<List<Doctorresponse>>
+    public ResponseEntity<Commonresponse>
     getDoctorsBySpecialization(
             @RequestParam String type) {
 
-        List<Doctorresponse> doctors =
-                doctorService.getDoctorsBySpecialization(type);
-
-        return ResponseEntity.ok(doctors);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "Doctors fetched for specialization: " + type,
+                        doctorService.getDoctorsBySpecialization(type)));
     }
 
     // =====================================================
     // GET AVAILABLE DOCTORS
     // GET /api/doctors/available
+    // SUCCESS → 200 OK
     // =====================================================
     @GetMapping("/available")
-    public ResponseEntity<List<Doctorresponse>>
-    getAvailableDoctors() {
+    public ResponseEntity<Commonresponse> getAvailableDoctors() {
 
-        List<Doctorresponse> doctors =
-                doctorService.getAvailableDoctors();
-
-        return ResponseEntity.ok(doctors);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "Available doctors fetched successfully",
+                        doctorService.getAvailableDoctors()));
     }
 
     // =====================================================
     // GET AVAILABLE DOCTORS BY SPECIALIZATION
     // GET /api/doctors/available/specialization?type=Neurology
+    // SUCCESS → 200 OK
+    // FAIL    → 404 Not Found
     // =====================================================
     @GetMapping("/available/specialization")
-    public ResponseEntity<List<Doctorresponse>>
+    public ResponseEntity<Commonresponse>
     getAvailableDoctorsBySpecialization(
             @RequestParam String type) {
 
-        List<Doctorresponse> doctors =
-                doctorService
-                        .getAvailableDoctorsBySpecialization(type);
-
-        return ResponseEntity.ok(doctors);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "Available doctors fetched for: " + type,
+                        doctorService
+                                .getAvailableDoctorsBySpecialization(
+                                        type)));
     }
 
     // =====================================================
     // SEARCH DOCTORS BY NAME
     // GET /api/doctors/search?name=raj
+    // SUCCESS → 200 OK
+    // FAIL    → 404 Not Found
     // =====================================================
     @GetMapping("/search")
-    public ResponseEntity<List<Doctorresponse>>
-    searchDoctorsByName(
+    public ResponseEntity<Commonresponse> searchDoctorsByName(
             @RequestParam String name) {
 
-        List<Doctorresponse> doctors =
-                doctorService.searchDoctorsByName(name);
-
-        return ResponseEntity.ok(doctors);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "Doctors found with name: " + name,
+                        doctorService.searchDoctorsByName(name)));
     }
 
     // =====================================================
     // FILTER DOCTORS
-    // GET /api/doctors/filter?name=raj
-    //                         &specialization=Cardiology
-    //                         &available=true
-    // All parameters are optional
+    // GET /api/doctors/filter
+    // SUCCESS → 200 OK
     // =====================================================
     @GetMapping("/filter")
-    public ResponseEntity<List<Doctorresponse>>
-    filterDoctors(
+    public ResponseEntity<Commonresponse> filterDoctors(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String specialization,
             @RequestParam(required = false) Boolean available) {
 
-        List<Doctorresponse> doctors =
-                doctorService.filterDoctors(
-                        name,
-                        specialization,
-                        available);
-
-        return ResponseEntity.ok(doctors);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "Doctors filtered successfully",
+                        doctorService.filterDoctors(
+                                name, specialization, available)));
     }
 
     // =====================================================
-    // GET ALL DOCTORS WITH PAGINATION + SORTING
+    // GET ALL DOCTORS PAGINATED
     // GET /api/doctors/paginated?page=0&size=5&sortBy=name
+    // SUCCESS → 200 OK
     // =====================================================
     @GetMapping("/paginated")
-    public ResponseEntity<Page<Doctorresponse>>
-    getAllDoctorsPaginated(
+    public ResponseEntity<Commonresponse> getAllDoctorsPaginated(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "id") String sortBy) {
 
-        Page<Doctorresponse> doctors =
-                doctorService.getAllDoctorsPaginated(
-                        page,
-                        size,
-                        sortBy);
-
-        return ResponseEntity.ok(doctors);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "Doctors fetched with pagination",
+                        doctorService.getAllDoctorsPaginated(
+                                page, size, sortBy)));
     }
 
     // =====================================================
-    // GET AVAILABLE DOCTORS WITH PAGINATION
+    // GET AVAILABLE DOCTORS PAGINATED
     // GET /api/doctors/available/paginated?page=0&size=5
+    // SUCCESS → 200 OK
     // =====================================================
     @GetMapping("/available/paginated")
-    public ResponseEntity<Page<Doctorresponse>>
+    public ResponseEntity<Commonresponse>
     getAvailableDoctorsPaginated(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
 
-        Page<Doctorresponse> doctors =
-                doctorService.getAvailableDoctorsPaginated(
-                        page,
-                        size);
-
-        return ResponseEntity.ok(doctors);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "Available doctors fetched with pagination",
+                        doctorService.getAvailableDoctorsPaginated(
+                                page, size)));
     }
 
     // =====================================================
-    // GET DOCTORS BY SPECIALIZATION WITH PAGINATION
+    // GET DOCTORS BY SPECIALIZATION PAGINATED
     // GET /api/doctors/specialization/paginated
-    //     ?type=Cardiology&page=0&size=5
+    // SUCCESS → 200 OK
     // =====================================================
     @GetMapping("/specialization/paginated")
-    public ResponseEntity<Page<Doctorresponse>>
+    public ResponseEntity<Commonresponse>
     getDoctorsBySpecializationPaginated(
             @RequestParam String type,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
 
-        Page<Doctorresponse> doctors =
-                doctorService
-                        .getDoctorsBySpecializationPaginated(
-                                type,
-                                page,
-                                size);
-
-        return ResponseEntity.ok(doctors);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "Doctors fetched by specialization paginated",
+                        doctorService
+                                .getDoctorsBySpecializationPaginated(
+                                        type, page, size)));
     }
 
     // =====================================================
-    // GET DOCTORS AVAILABLE ON A SPECIFIC DAY
+    // GET DOCTORS BY AVAILABLE DAY
     // GET /api/doctors/schedule?day=Monday
+    // SUCCESS → 200 OK
+    // FAIL    → 404 Not Found
     // =====================================================
     @GetMapping("/schedule")
-    public ResponseEntity<List<Doctorresponse>>
+    public ResponseEntity<Commonresponse>
     getDoctorsByAvailableDay(
             @RequestParam String day) {
 
-        List<Doctorresponse> doctors =
-                doctorService.getDoctorsByAvailableDay(day);
-
-        return ResponseEntity.ok(doctors);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "Doctors available on: " + day,
+                        doctorService
+                                .getDoctorsByAvailableDay(day)));
     }
 
     // =====================================================
     // UPDATE DOCTOR
     // PUT /api/doctors/{id}
+    // SUCCESS → 200 OK
+    // FAIL    → 404 Not Found
+    // FAIL    → 400 Bad Request (duplicate email)
     // =====================================================
     @PutMapping("/{id}")
-    public ResponseEntity<Doctorresponse> updateDoctor(
+    public ResponseEntity<Commonresponse> updateDoctor(
             @PathVariable Long id,
             @RequestBody Doctorrequest doctorrequest) {
 
-        Doctorresponse response =
-                doctorService.updateDoctor(
-                        id,
-                        doctorrequest);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "Doctor updated successfully",
+                        doctorService.updateDoctor(
+                                id, doctorrequest)));
     }
 
     // =====================================================
     // UPDATE AVAILABILITY ONLY
     // PATCH /api/doctors/{id}/availability?status=false
+    // SUCCESS → 200 OK
+    // FAIL    → 404 Not Found
     // =====================================================
     @PatchMapping("/{id}/availability")
-    public ResponseEntity<Doctorresponse>
-    updateAvailability(
+    public ResponseEntity<Commonresponse> updateAvailability(
             @PathVariable Long id,
             @RequestParam boolean status) {
 
-        Doctorresponse response =
-                doctorService.updateAvailability(
-                        id,
-                        status);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "Doctor availability updated to: " + status,
+                        doctorService.updateAvailability(
+                                id, status)));
     }
 
     // =====================================================
     // DELETE DOCTOR
     // DELETE /api/doctors/{id}
+    // SUCCESS → 200 OK
+    // FAIL    → 404 Not Found
     // =====================================================
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDoctor(
+    public ResponseEntity<Commonresponse> deleteDoctor(
             @PathVariable Long id) {
 
         doctorService.deleteDoctor(id);
 
-        return ResponseEntity.ok(
-                "Doctor deleted successfully with id: " + id);
+        return ResponseEntity
+                .status(HttpStatus.OK)              // 200
+                .body(Commonresponse.success(
+                        "Doctor deleted successfully with id: " + id,
+                        null));
     }
 }
