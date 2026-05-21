@@ -12,9 +12,10 @@ import com.stackly1.hospitalmanagementssystem.entity.Doctor;
 import com.stackly1.hospitalmanagementssystem.exception.ResourceNotFoundException;
 import com.stackly1.hospitalmanagementssystem.repository.Appointmentrepository;
 import com.stackly1.hospitalmanagementssystem.repository.Doctorrepository;
+import com.stackly1.hospitalmanagementssystem.service.Doctrorservice;
 
 @Service
-public class DoctorserviceImp {
+public class DoctorserviceImp implements Doctrorservice {
 
 	private final Doctorrepository doctorRepository;
 
@@ -26,87 +27,107 @@ public class DoctorserviceImp {
 		if (doctorRepository.existsByEmail(dto.getEmail())) {
 			throw new IllegalArgumentException("Email already exists: " + dto.getEmail());
 		}
-		Doctor doc = new Doctor(dto.getName(), dto.getGender(), dto.getEmail(), dto.getSpecialization(),
-				dto.getPh_number(), dto.getAppointments());
 
-		if (doc.getAppointments() != null) {
-
-			for (Appointment appointment : doc.getAppointments()) {
-
-				appointment.setDoctor(doc);
-			}
+		if (doctorRepository.findByPhnumber(dto.getPhnumber()).isPresent()) {
+			throw new RuntimeException("Doctor already exists with phone: " + dto.getPhnumber());
 		}
 
+		Doctor doc = new Doctor(dto.getDoctorname(), dto.getGender(), dto.getEmail(), dto.getQualification(),
+				dto.getSpecialization(), dto.getPhnumber(), dto.getAvailablestatus(), dto.getShifttype());
 		Doctor saved = doctorRepository.save(doc);
 		return toDTO(saved);
 	}
 
-	public List<Doctorresponse> getAllUsers() {
+	public List<Doctorresponse> getAllDoctors() {
 		return doctorRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
 	}
 
-	public Doctorresponse getUserById(Integer id) {
+	public Doctorresponse getDoctorById(Integer id) {
 		Doctor doc = doctorRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+				.orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + id));
 		return toDTO(doc);
 	}
 
+	public Doctorresponse getDoctorByName(String doctorname) {
+		Doctor doc = doctorRepository.findByDoctorname(doctorname)
+				.orElseThrow(() -> new ResourceNotFoundException("Doctor not found with this Name : " + doctorname));
+		return toDTO(doc);
+	}
+
+	public Doctorresponse getDoctorByMail(String email) {
+		Doctor doc = doctorRepository.findByEmail(email)
+				.orElseThrow(() -> new ResourceNotFoundException("Doctor not found with this Email : " + email));
+		return toDTO(doc);
+	}
+
+	@Override
+	public Doctorresponse getDoctorByPhonenumber(String ph_number) {
+		Doctor doc = doctorRepository.findByPhnumber(ph_number).orElseThrow(
+				() -> new ResourceNotFoundException("Doctor not found with this phone number : " + ph_number));
+		return toDTO(doc);
+	}
+	
+	@Override
+	public Doctorresponse getDoctorBySpecialitation(String specialization) {
+		Doctor doc = doctorRepository.findBySpecialization(specialization).orElseThrow(
+				() -> new ResourceNotFoundException("Doctor not found with this specialization : " + specialization));
+		return toDTO(doc);
+	}
+
+	@Override
+	public Doctorresponse getDoctorByAvaialblity(String availablestatus) {
+		Doctor doc = doctorRepository.findByAvailablestatus(availablestatus).orElseThrow(
+				() -> new ResourceNotFoundException("Doctor not found with this availablestatus : " + availablestatus));
+		return toDTO(doc);
+	}
+
+	@Override
+	public Doctorresponse getDoctorByShift(String shifttype) {
+		Doctor doc = doctorRepository.findByShifttype(shifttype).orElseThrow(
+				() -> new ResourceNotFoundException("Doctor not found with this shift type : " + shifttype));
+		return toDTO(doc);
+	}
 
 	public Doctorresponse updateUser(Integer id, Doctorrequest dto) {
 
-	    Doctor doc = doctorRepository.findById(id)
-	            .orElseThrow(() ->
-	                    new ResourceNotFoundException("User not found with id: " + id));
+		Doctor doc = doctorRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + id));
 
-	    if (!doc.getEmail().equals(dto.getEmail())
-	            && doctorRepository.existsByEmail(dto.getEmail())) {
+		if (!doc.getEmail().equals(dto.getEmail()) && doctorRepository.existsByEmail(dto.getEmail())) {
 
-	        throw new IllegalArgumentException(
-	                "Email already exists: " + dto.getEmail());
-	    }
+			throw new IllegalArgumentException("Email already exists: " + dto.getEmail());
+		}
 
-	    doc.setName(dto.getName());
-	    doc.setGender(dto.getGender());
-	    doc.setEmail(dto.getEmail());
-	    doc.setPh_number(dto.getPh_number());
-	    doc.setSpecialization(dto.getSpecialization());
+		if (doctorRepository.findByPhnumber(doc.getPhnumber()).isPresent()) {
+			throw new RuntimeException("Doctor already exists with phone: " + doc.getPhnumber());
+		}
+		
+		doc.setDoctorname(dto.getDoctorname());
+		doc.setGender(dto.getGender());
+		doc.setEmail(dto.getEmail());
+		doc.setPhnumber(dto.getPhnumber());
+		doc.setSpecialization(dto.getSpecialization());
+		doc.setQualification(dto.getQualification());
+		doc.setShifttype(dto.getShifttype());
+		doc.setAvailablestatus(dto.getAvailablestatus());
 
-	    if (dto.getAppointments() != null) {
-//	        doc.getAppointments().clear();
-	        for (Appointment appointment : dto.getAppointments()) {
-	            appointment.setDoctor(doc); 
-	            doc.getAppointments().add(appointment);
-	        }
-	    }
+		Doctor updated = doctorRepository.save(doc);
 
-	    Doctor updated = doctorRepository.save(doc);
+		return toDTO(updated);
 
-	    return toDTO(updated);
 	}
 
 	public void deleteUser(Integer id) {
 		if (!doctorRepository.existsById(id)) {
-			throw new ResourceNotFoundException("User not found with id: " + id);
+			throw new ResourceNotFoundException("Doctor not found with id: " + id);
 		}
 		doctorRepository.deleteById(id);
 	}
 
-	public void deleteAppointment(Integer doctorId, Integer appointmentId) {
-
-		Doctor doctor = doctorRepository.findById(doctorId)
-				.orElseThrow(() -> new ResourceNotFoundException("Doctor not found"));
-
-		Appointment appointmentToRemove = doctor.getAppointments().stream()
-				.filter(app -> app.getId().intValue() == appointmentId).findFirst()
-				.orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
-
-		doctor.getAppointments().remove(appointmentToRemove);
-
-		doctorRepository.save(doctor);
-	}
-
 	private Doctorresponse toDTO(Doctor doc) {
-		return new Doctorresponse(doc.getId(), doc.getName(), doc.getGender(), doc.getEmail(), doc.getSpecialization(),
-				doc.getPh_number(), doc.getAppointments());
+		return new Doctorresponse(doc.getId(), doc.getDoctorname(), doc.getGender(), doc.getEmail(),
+				doc.getQualification(), doc.getSpecialization(), doc.getPhnumber(), doc.getAvailablestatus(),
+				doc.getShifttype());
 	}
+
 }

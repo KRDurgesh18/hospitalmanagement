@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stackly1.hospitalmanagementssystem.common.Commonresponse;
 import com.stackly1.hospitalmanagementssystem.dto.response.Doctorresponse;
 import com.stackly1.hospitalmanagementssystem.dto1.request.Doctorrequest;
 import com.stackly1.hospitalmanagementssystem.service.serviceImp.DoctorserviceImp;
@@ -26,20 +27,60 @@ public class Doctorcontroller {
 	}
 
 	@PostMapping("/add")
-	public ResponseEntity<Doctorresponse> createUser(@Valid @RequestBody Doctorrequest dto) {
+	public ResponseEntity<Commonresponse<Doctorresponse>> 
+	createUser(@Valid @RequestBody Doctorrequest dto) {
 		Doctorresponse created = doctorService.createUser(dto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(created);
+		
+		  Commonresponse<Doctorresponse> response =
+		            new Commonresponse<>(
+		                    HttpStatus.CREATED.value(),
+		                    "Doctor created successfully",
+		                    created
+		            );
+		  
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	@GetMapping("/show")
-	public ResponseEntity<List<Doctorresponse>> getAllUsers() {
-		return ResponseEntity.ok(doctorService.getAllUsers());
+	public ResponseEntity<List<Doctorresponse>> getAllDoctors() {
+		return ResponseEntity.ok(doctorService.getAllDoctors());
 	}
 
 	@GetMapping("/show/{id}")
-	public ResponseEntity<Doctorresponse> getUserById(@PathVariable Integer id) {
-		return ResponseEntity.ok(doctorService.getUserById(id));
+	public ResponseEntity<Doctorresponse> getDoctorById(@PathVariable Integer id) {
+		return ResponseEntity.ok(doctorService.getDoctorById(id));
 	}
+	
+	
+	@GetMapping("/show/name/{doctorname}")
+	public ResponseEntity<Doctorresponse> getDoctorByName(@PathVariable String doctorname) {
+		return ResponseEntity.ok(doctorService.getDoctorByName(doctorname));
+	}
+
+	@GetMapping("/show/mail/{email}")
+	public ResponseEntity<Doctorresponse> getDoctorByMail(@PathVariable String email) {
+		return ResponseEntity.ok(doctorService.getDoctorByMail(email));
+	}
+	
+	@GetMapping("/show/phone/{ph_number}")
+	public ResponseEntity<Doctorresponse> getDoctorByPhonenumber(@PathVariable String ph_number) {
+		return ResponseEntity.ok(doctorService.getDoctorByPhonenumber(ph_number));
+	}
+	
+	@GetMapping("/show/spl/{specialization}")
+	public ResponseEntity<Doctorresponse> getDoctorBySpecialitation(@PathVariable String specialization) {
+		return ResponseEntity.ok(doctorService.getDoctorBySpecialitation(specialization));
+	}
+	
+	@GetMapping("/show/availablilty/{availablestatus}")
+	public ResponseEntity<Doctorresponse> getDoctorByAvaialblity(@PathVariable String availablestatus) {
+		return ResponseEntity.ok(doctorService.getDoctorByAvaialblity(availablestatus));
+	}
+	
+	@GetMapping("/show/shift/{shifttype}")
+	public ResponseEntity<Doctorresponse> getDoctorByShift(@PathVariable String shifttype) {
+		return ResponseEntity.ok(doctorService.getDoctorByShift(shifttype));
+	}	
 
 	@PutMapping("/update/{id}")
 	public ResponseEntity<Doctorresponse> updateUser(@PathVariable Integer id, @Valid @RequestBody Doctorrequest dto) {
@@ -50,17 +91,7 @@ public class Doctorcontroller {
 	public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Integer id) {
 		doctorService.deleteUser(id);
 		Map<String, String> response = new HashMap<>();
-		response.put("message", "Doctor with id " + id + " is deleted successfully");
+		response.put("message", "Doctor id " + id + " is deleted successfully");
 		return ResponseEntity.ok(response);
 	}
-
-	@DeleteMapping("/delete/{doctorId}/appointment/{appointmentId}")
-	public ResponseEntity<Map<String, String>> deleteAppointment(@PathVariable Integer doctorId, @PathVariable Integer appointmentId) {
-		doctorService.deleteAppointment(doctorId, appointmentId);
-		Map<String, String> response = new HashMap<>();
-		response.put("message", "Doctor with id " + doctorId + " and Appoinment id " 
-				+ appointmentId + " is deleted successfully");
-		return ResponseEntity.ok(response);
-	}
-
 }

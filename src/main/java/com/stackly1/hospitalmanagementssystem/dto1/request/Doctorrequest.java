@@ -1,11 +1,9 @@
 package com.stackly1.hospitalmanagementssystem.dto1.request;
 
-import java.util.List;
-
-import com.stackly1.hospitalmanagementssystem.entity.Appointment;
-
 import jakarta.persistence.Column;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -14,66 +12,71 @@ import lombok.Data;
 
 @Data
 public class Doctorrequest {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-//	@NotBlank(message = "Name is required")
-//    @Column(nullable = false)
-	private String name;
-    
-//	@NotBlank(message = "Gender is required")
-//	@Column(nullable = false)
+	@NotBlank(message = "Doctor Name is required")
+	@Column(nullable = false)
+	private String doctorname;
+
+	@NotBlank(message = "Gender is required")
+	@Column(nullable = false)
 	private String gender;
+
+	@NotBlank(message = "Email is required")
+	@Email(message = "Email must be valid")
+	@Column(nullable = false, unique = true)
+	private String email;
+
+	@NotBlank(message = "Qualification is required")
+	@Column(nullable = false)
+	private String qualification;
 	
-//    @NotBlank(message = "Email is required")
-//    @Email(message = "Email must be valid")
-//    @Column(nullable = false, unique = true)
-    private String email;
-    
-//    @NotBlank(message = "Specialization is required")
-//    @Column(nullable = false)
+	@NotBlank(message = "Specialization is required")
+	@Column(nullable = false)
 	private String specialization;
+
+	@NotBlank(message = "Phone Number is required")
+	@Column(nullable = false)
+	@Pattern(regexp = "^[0-9]\\d{9}$", message = "Invalid mobile number")
+	private String phnumber;
+
+	@NotBlank(message = "Availablity Status is required")
+	@Column(nullable = false)
+	private String availablestatus;
+
+	@NotBlank(message = "Shift Type is required")
+	@Column(nullable = false)
+	private String shifttype;
 	
-//    @NotBlank(message = "Specialization is required")
-//    @Column(nullable = false)
-//    @Pattern(
-//            regexp = "^[0-9]\\d{9}$",
-//            message = "Invalid mobile number"
-//        )
-	private String ph_number;
+//	@OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL,orphanRemoval = true)
+//	@JsonManagedReference
+//	private List<Appointment> appointments;
 	
-	private List<Appointment> appointments;
 	
 	 public Doctorrequest() {}
 
-	public String getName() {
-		return name;
+	public int getId() {
+		return id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public String getEmail() {
-		return email;
+
+
+	public String getDoctorname() {
+		return doctorname;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setDoctorname(String doctorname) {
+		this.doctorname = doctorname;
 	}
 
-	public String getSpecialization() {
-		return specialization;
-	}
-
-	public void setSpecialization(String specialization) {
-		this.specialization = specialization;
-	}
-
-	public String getPh_number() {
-		return ph_number;
-	}
-
-	public void setPh_number(String ph_number) {
-		this.ph_number = ph_number;
+	public void setAvailablestatus(String availablestatus) {
+		this.availablestatus = availablestatus;
 	}
 
 	public String getGender() {
@@ -84,14 +87,50 @@ public class Doctorrequest {
 		this.gender = gender;
 	}
 
-	
-	public List<Appointment> getAppointments() {
-		return appointments;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setAppointments(List<Appointment> appointments) {
-		this.appointments = appointments;
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	 
+
+	
+	public String getQualification() {
+		return qualification;
+	}
+
+	public void setQualification(String qualification) {
+		this.qualification = qualification;
+	}
+
+	public String getSpecialization() {
+		return specialization;
+	}
+
+	public void setSpecialization(String specialization) {
+		this.specialization = specialization;
+	}
+
+
+	public String getPhnumber() {
+		return phnumber;
+	}
+
+	public void setPhnumber(String phnumber) {
+		this.phnumber = phnumber;
+	}
+
+	public String getAvailablestatus() {
+		return availablestatus;
+	}
+
+	public String getShifttype() {
+		return shifttype;
+	}
+
+	public void setShifttype(String shifttype) {
+		this.shifttype = shifttype;
+	}
 	 
 }
