@@ -1,10 +1,11 @@
 package com.stackly1.hospitalmanagementssystem.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import com.stackly1.hospitalmanagementssystem.dto.request.Appointmentrequest;
 import org.springframework.web.bind.annotation.*;
 
+import com.stackly1.hospitalmanagementssystem.common.Commonresponse;
 import com.stackly1.hospitalmanagementssystem.entity.Appointment;
 import com.stackly1.hospitalmanagementssystem.service.AppointmentService;
 
@@ -15,47 +16,74 @@ public class Appointmentcontroller {
     @Autowired
     private AppointmentService appointmentService;
 
-
     // 1. book appointment
     @PostMapping("/bookAppointment")
-    public Appointment bookAppointment(
-            @RequestBody Appointment appointment){
+    public Commonresponse bookAppointment(
+            @RequestBody @Valid Appointmentrequest request){
 
-        return appointmentService.bookAppointment(appointment);
+        Commonresponse response = new Commonresponse();
+        response.setStatuscode("200");
+        response.setMessage("Appointment booked successfully");
+        response.setData(
+                appointmentService.bookAppointment(request));
+
+        return response;
     }
-
 
     // 2. cancel appointment
     @PutMapping("/cancel/{id}")
-    public Appointment cancelAppointment(
+    public Commonresponse cancelAppointment(
             @PathVariable int id){
 
-        return appointmentService.cancelAppointment(id);
-    }
+        Commonresponse response = new Commonresponse();
+        response.setStatuscode("200");
+        response.setMessage("Appointment cancelled successfully");
+        response.setData(
+                appointmentService.cancelAppointment(id));
 
+        return response;
+    }
 
     // 3. get all appointments
     @GetMapping("/getAppointments")
-    public List<Appointment> getAllAppointments(){
+    public Commonresponse getAllAppointments(){
 
-        return appointmentService.getAllAppointments();
+        Commonresponse response = new Commonresponse();
+        response.setStatuscode("200");
+        response.setMessage("Appointments fetched successfully");
+        response.setData(
+                appointmentService.getAllAppointments());
+
+        return response;
     }
-
 
     // 4. get doctor appointments
     @GetMapping("/doctor/{doctorId}")
-    public List<Appointment> getAppointmentsByDoctor(
+    public Commonresponse getAppointmentsByDoctor(
             @PathVariable int doctorId){
 
-        return appointmentService.getAppointmentsByDoctorId(doctorId);
+        Commonresponse response = new Commonresponse();
+        response.setStatuscode("200");
+        response.setMessage(
+                "Doctor appointments fetched successfully");
+        response.setData(
+                appointmentService.getAppointmentsByDoctorId(doctorId));
+
+        return response;
     }
 
-
-    // existing
+    // 5. get patient appointments
     @GetMapping("/patient/{patientId}")
-    public List<Appointment> getAppointmentsByPatient(
+    public Commonresponse getAppointmentsByPatient(
             @PathVariable int patientId){
 
-        return appointmentService.getAppointmentsByPatientId(patientId);
+        Commonresponse response = new Commonresponse();
+        response.setStatuscode("200");
+        response.setMessage(
+                "Patient appointments fetched successfully");
+        response.setData(
+                appointmentService.getAppointmentsByPatientId(patientId));
+
+        return response;
     }
 }
