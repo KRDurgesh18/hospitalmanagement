@@ -3,7 +3,10 @@ package com.stackly1.hospitalmanagementssystem.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
 
 import com.stackly1.hospitalmanagementssystem.dto.response.Doctorresponse;
 import com.stackly1.hospitalmanagementssystem.dto1.request.Doctorrequest;
@@ -11,13 +14,15 @@ import com.stackly1.hospitalmanagementssystem.service.Doctrorservice;
 
 @RestController
 @RequestMapping("/doctor")
+@Validated
 public class Doctorcontroller {
 
     @Autowired
     private Doctrorservice service;
 
     @PostMapping
-    public Doctorresponse saveDoctor(@RequestBody Doctorrequest request) {
+    public Doctorresponse saveDoctor(
+            @Valid @RequestBody Doctorrequest request) {
 
         return service.saveDoctor(request);
     }
@@ -35,8 +40,9 @@ public class Doctorcontroller {
     }
 
     @PutMapping("/{id}")
-    public Doctorresponse updateDoctor(@PathVariable Long id,
-                                       @RequestBody Doctorrequest request) {
+    public Doctorresponse updateDoctor(
+            @PathVariable Long id,
+            @Valid @RequestBody Doctorrequest request) {
 
         return service.updateDoctor(id, request);
     }
@@ -44,6 +50,8 @@ public class Doctorcontroller {
     @DeleteMapping("/{id}")
     public String deleteDoctor(@PathVariable Long id) {
 
-        return service.deleteDoctor(id);
+        service.deleteDoctor(id);
+
+        return "Doctor deleted successfully";
     }
 }

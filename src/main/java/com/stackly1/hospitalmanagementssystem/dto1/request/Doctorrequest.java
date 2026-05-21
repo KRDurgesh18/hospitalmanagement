@@ -1,18 +1,45 @@
 package com.stackly1.hospitalmanagementssystem.dto1.request;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
 public class Doctorrequest {
 
+    @NotBlank(message = "Doctor name is required")
     private String doctorName;
+
+    @NotBlank(message = "Specialization is required")
     private String specialization;
+
+    @NotBlank(message = "Phone number is required")
     private String phoneNumber;
+
+    @Email(message = "Invalid email format")
     private String email;
+
+    @Positive(message = "Experience must be greater than 0")
     private int experience;
+
+    @NotBlank(message = "Qualification is required")
     private String qualification;
+
+    @NotBlank(message = "Gender is required")
     private String gender;
+
+    @Positive(message = "Consultation fee must be greater than 0")
     private double consultationFee;
+
+    @NotBlank(message = "Availability is required")
     private String availability;
+
+    @NotBlank(message = "Department is required")
     private String department;
+
+    @NotBlank(message = "Hospital name is required")
     private String hospitalName;
+
+    @NotBlank(message = "Address is required")
     private String address;
 
     public Doctorrequest() {
