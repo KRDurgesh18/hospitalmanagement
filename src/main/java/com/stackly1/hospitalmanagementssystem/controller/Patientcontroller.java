@@ -22,18 +22,13 @@ public class Patientcontroller {
 	private Patientservice patientService;
 	
 	@PutMapping("/{uid}")
-	public Commonresponse updatePatient(@PathVariable String uid,@Valid @RequestBody Patientrequest request)
-	{
-		
-		Patientresponse response= patientService.updatePatient(uid,request);
-		Commonresponse commonresponse=new Commonresponse();
-		commonresponse.setStatuscode("200");
-	    commonresponse.setMessage("Patient updated successfully");
-	    commonresponse.setData(response);
+    public Commonresponse updatePatient(
+            @PathVariable String uid,
+            @Valid @RequestBody Patientrequest request) {
 
-	    return commonresponse;
+        return patientService.updatePatient(uid, request);
+    }
 
-	}
 	
 
 }
