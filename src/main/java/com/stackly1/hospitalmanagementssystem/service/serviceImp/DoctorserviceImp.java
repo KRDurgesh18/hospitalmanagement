@@ -93,14 +93,13 @@ public class DoctorserviceImp implements Doctrorservice {
 		Doctor doc = doctorRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + id));
 
-		if (!doc.getEmail().equals(dto.getEmail()) && doctorRepository.existsByEmail(dto.getEmail())) {
-
-			throw new IllegalArgumentException("Email already exists: " + dto.getEmail());
-		}
-
-		if (doctorRepository.findByPhnumber(doc.getPhnumber()).isPresent()) {
-			throw new RuntimeException("Doctor already exists with phone: " + doc.getPhnumber());
-		}
+//		if (!doc.getEmail().equals(dto.getEmail()) && doctorRepository.existsByEmail(dto.getEmail())) {
+//			throw new IllegalArgumentException("Email already exists: " + dto.getEmail());
+//		}
+//
+//		if (doctorRepository.findByPhnumber(doc.getPhnumber()).isPresent()) {
+//			throw new RuntimeException("Doctor already exists with phone: " + doc.getPhnumber());
+//		}
 		
 		doc.setDoctorname(dto.getDoctorname());
 		doc.setGender(dto.getGender());
