@@ -13,6 +13,4 @@ public class AppointmentDTO {
     private int patientId;
     private String patientName;
     
-    
-    
 }
