@@ -1,5 +1,6 @@
 package com.stackly1.hospitalmanagementssystem.controller;
 
+import com.stackly1.hospitalmanagementssystem.common.Commonresponse;
 import com.stackly1.hospitalmanagementssystem.dto1.request.Doctorrequest;
 import com.stackly1.hospitalmanagementssystem.dto.response.Doctorresponse;
 import com.stackly1.hospitalmanagementssystem.service.Doctorservice;
@@ -15,34 +16,59 @@ public class Doctorcontroller {
     @Autowired
     private Doctorservice doctorservice;
 
+    // POST - Add new doctor
     @PostMapping
-    public ResponseEntity<Doctorresponse> addDoctor(
-            @RequestBody Doctorrequest request) {
-        return ResponseEntity.ok(doctorservice.addDoctor(request));
+    public ResponseEntity<Commonresponse<Doctorresponse>> 
+                addDoctor(@RequestBody Doctorrequest request) {
+        Doctorresponse response = 
+                doctorservice.addDoctor(request);
+        return ResponseEntity.ok(
+            Commonresponse.success(
+                "Doctor added successfully", response));
     }
 
+    // GET - Get all doctors
     @GetMapping
-    public ResponseEntity<List<Doctorresponse>> getAllDoctors() {
-        return ResponseEntity.ok(doctorservice.getAllDoctors());
+    public ResponseEntity<Commonresponse<List<Doctorresponse>>> 
+                getAllDoctors() {
+        List<Doctorresponse> response = 
+                doctorservice.getAllDoctors();
+        return ResponseEntity.ok(
+            Commonresponse.success(
+                "Doctors fetched successfully", response));
     }
 
+    // GET - Get doctor by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Doctorresponse> getDoctorById(
-            @PathVariable Long id) {
-        return ResponseEntity.ok(doctorservice.getDoctorById(id));
+    public ResponseEntity<Commonresponse<Doctorresponse>> 
+                getDoctorById(@PathVariable Long id) {
+        Doctorresponse response = 
+                doctorservice.getDoctorById(id);
+        return ResponseEntity.ok(
+            Commonresponse.success(
+                "Doctor fetched successfully", response));
     }
 
+    // PUT - Update doctor
     @PutMapping("/{id}")
-    public ResponseEntity<Doctorresponse> updateDoctor(
-            @PathVariable Long id,
-            @RequestBody Doctorrequest request) {
-        return ResponseEntity.ok(doctorservice.updateDoctor(id, request));
+    public ResponseEntity<Commonresponse<Doctorresponse>> 
+                updateDoctor(@PathVariable Long id,
+                @RequestBody Doctorrequest request) {
+        Doctorresponse response = 
+                doctorservice.updateDoctor(id, request);
+        return ResponseEntity.ok(
+            Commonresponse.success(
+                "Doctor updated successfully", response));
     }
 
+    // DELETE - Delete doctor
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDoctor(
-            @PathVariable Long id) {
+    public ResponseEntity<Commonresponse<String>> 
+                deleteDoctor(@PathVariable Long id) {
         doctorservice.deleteDoctor(id);
-        return ResponseEntity.ok("Doctor deleted successfully");
+        return ResponseEntity.ok(
+            Commonresponse.success(
+                "Doctor deleted successfully", 
+                "Doctor with id " + id + " deleted"));
     }
 }

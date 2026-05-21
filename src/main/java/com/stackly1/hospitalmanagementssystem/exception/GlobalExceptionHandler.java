@@ -1,62 +1,42 @@
 package com.stackly1.hospitalmanagementssystem.exception;
 
+import com.stackly1.hospitalmanagementssystem.common.Commonresponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Handles "Doctor not found" or "Patient not found" errors
+    // Handles Doctor/Patient not found errors
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, Object>> 
+    public ResponseEntity<Commonresponse<Object>> 
                 handleRuntimeException(RuntimeException ex) {
-
-        Map<String, Object> error = new HashMap<>();
-        error.put("timestamp", LocalDateTime.now().toString());
-        error.put("status", 404);
-        error.put("error", "Not Found");
-        error.put("message", ex.getMessage());
-
         return ResponseEntity
-               .status(HttpStatus.NOT_FOUND)
-               .body(error);
+            .status(HttpStatus.NOT_FOUND)
+            .body(Commonresponse.error(
+                ex.getMessage(), 404));
     }
 
-    // Handles all other unexpected errors
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> 
-                handleGlobalException(Exception ex) {
-
-        Map<String, Object> error = new HashMap<>();
-        error.put("timestamp", LocalDateTime.now().toString());
-        error.put("status", 500);
-        error.put("error", "Internal Server Error");
-        error.put("message", ex.getMessage());
-
-        return ResponseEntity
-               .status(HttpStatus.INTERNAL_SERVER_ERROR)
-               .body(error);
-    }
-
-    // Handles illegal argument errors
+    // Handles wrong input errors
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, Object>> 
-                handleIllegalArgument(IllegalArgumentException ex) {
-
-        Map<String, Object> error = new HashMap<>();
-        error.put("timestamp", LocalDateTime.now().toString());
-        error.put("status", 400);
-        error.put("error", "Bad Request");
-        error.put("message", ex.getMessage());
-
+    public ResponseEntity<Commonresponse<Object>> 
+                handleIllegalArgument(
+                    IllegalArgumentException ex) {
         return ResponseEntity
-               .status(HttpStatus.BAD_REQUEST)
-               .body(error);
+            .status(HttpStatus.BAD_REQUEST)
+            .body(Commonresponse.error(
+                ex.getMessage(), 400));
+    }
+
+    // Handles all other errors
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Commonresponse<Object>> 
+                handleGlobalException(Exception ex) {
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(Commonresponse.error(
+                ex.getMessage(), 500));
     }
 }
