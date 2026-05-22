@@ -9,9 +9,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.NoArgsConstructor;
 
 
 @Entity
+@NoArgsConstructor
 @Table(name="appointment")
 public class Appointment {
 	
@@ -24,8 +26,7 @@ public class Appointment {
 	private String status;
 	
 	@Column(name="appointment_date")
-	private LocalDate appointment_date;
-	
+	private LocalDate appointment_date;	
 	
 	@ManyToOne
 	@JoinColumn(name="doctorId")
