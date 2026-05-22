@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.stackly1.hospitalmanagementssystem.common.Commonresponse;
 
+import com.stackly1.hospitalmanagementssystem.common.Commonresponse;
 import com.stackly1.hospitalmanagementssystem.dto.request.Appointmentrequest;
 import com.stackly1.hospitalmanagementssystem.dto.response.Appointmentresponse;
 import com.stackly1.hospitalmanagementssystem.service.Appointmentservice;
@@ -18,46 +20,100 @@ public class Appointmentcontroller {
 
     // Save Appointment
     @PostMapping("/bookAppointment")
-    public Appointmentresponse bookAppointment(
+    public Commonresponse bookAppointment(
             @RequestBody Appointmentrequest request) {
 
-        return appointmentService
-                .saveAppointment(request);
+        Appointmentresponse appointment =
+                appointmentService
+                        .saveAppointment(request);
+
+        Commonresponse response =
+                new Commonresponse();
+
+        response.setStatuscode("200");
+        response.setMessage(
+                "Appointment Booked Successfully");
+        response.setData(appointment);
+
+        return response;
     }
 
     // Get All Appointments
     @GetMapping("/getAppointments")
-    public List<Appointmentresponse> getAppointments() {
+    public Commonresponse getAppointments() {
 
-        return appointmentService
-                .getAllAppointments();
+        List<Appointmentresponse> appointments =
+                appointmentService
+                        .getAllAppointments();
+
+        Commonresponse response =
+                new Commonresponse();
+
+        response.setStatuscode("200");
+        response.setMessage(
+                "Appointments Fetched Successfully");
+        response.setData(appointments);
+
+        return response;
     }
 
     // Get Appointment By Id
     @GetMapping("/{id}")
-    public Appointmentresponse getAppointmentById(
+    public Commonresponse getAppointmentById(
             @PathVariable Integer id) {
 
-        return appointmentService
-                .getAppointmentById(id);
+        Appointmentresponse appointment =
+                appointmentService
+                        .getAppointmentById(id);
+
+        Commonresponse response =
+                new Commonresponse();
+
+        response.setStatuscode("200");
+        response.setMessage(
+                "Appointment Found Successfully");
+        response.setData(appointment);
+
+        return response;
     }
 
     // Update Appointment
     @PutMapping("/update/{id}")
-    public Appointmentresponse updateAppointment(
+    public Commonresponse updateAppointment(
             @PathVariable Integer id,
             @RequestBody Appointmentrequest request) {
 
-        return appointmentService
-                .updateAppointment(id, request);
+        Appointmentresponse updatedAppointment =
+                appointmentService
+                        .updateAppointment(id, request);
+
+        Commonresponse response =
+                new Commonresponse();
+
+        response.setStatuscode("200");
+        response.setMessage(
+                "Appointment Updated Successfully");
+        response.setData(updatedAppointment);
+
+        return response;
     }
 
     // Delete Appointment
     @DeleteMapping("/delete/{id}")
-    public String deleteAppointment(
+    public Commonresponse deleteAppointment(
             @PathVariable Integer id) {
 
-        return appointmentService
-                .deleteAppointment(id);
+        String message =
+                appointmentService
+                        .deleteAppointment(id);
+
+        Commonresponse response =
+                new Commonresponse();
+
+        response.setStatuscode("200");
+        response.setMessage(message);
+        response.setData(null);
+
+        return response;
     }
 }
