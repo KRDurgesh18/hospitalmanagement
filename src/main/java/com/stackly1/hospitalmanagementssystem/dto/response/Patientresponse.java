@@ -5,8 +5,26 @@ import lombok.Data;
 @Data
 public class Patientresponse {
 	private Integer id;
-	private String name;
-	private String age;
-	private String gender;
-	private String ph_number;
+	 
+    private String uid;
+ 
+    private String firstName;
+ 
+    private String lastName;
+ 
+    private String email;
+ 
+    private String phoneNumber;
+ 
+    private Integer age;
+ 
+    private String gender;
+ 
+    private String bloodGroup;
+ 
+    private String address;
+ 
+    private String emergencyContact;
+ 
+    private String status;
 }

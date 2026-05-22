@@ -9,13 +9,13 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 @Data
-@Entity
+//@Entity
 public class Appointment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
    private int id;
     private String status;
     private LocalDate appointment_date;
-    private Doctor doctor_id;
-    private Patient patient_id;
+//    private Doctor doctor_id;
+//    private Patient patient_id;
 }
