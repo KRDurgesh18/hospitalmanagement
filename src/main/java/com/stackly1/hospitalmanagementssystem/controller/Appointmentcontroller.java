@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.stackly1.hospitalmanagementssystem.common.Commonresponse;
 import com.stackly1.hospitalmanagementssystem.dto.request.AppointmentDeleterequest;
 import com.stackly1.hospitalmanagementssystem.dto.request.AppointmentDoctorId;
 import com.stackly1.hospitalmanagementssystem.dto.request.AppointmentPatientId;
@@ -24,23 +26,17 @@ public class Appointmentcontroller {
 	@Autowired
 	private Appointmentservice appointmentservice;
 
-	@PostMapping("/saveAppointment")
-	public Object saveAppointment(@RequestBody Appointmentrequest appointmentrequest) throws BadRequestException {
-		return (appointmentservice.saveAppointment(appointmentrequest));
-	}
-
 //	@PostMapping("/saveAppointment")
-//	public ResponseEntity<Commonresponse<?>> saveAppointment(@RequestBody Appointmentrequest appointmentrequest) {
-//
-//		Commonresponse<?> response = appointmentservice.saveAppointment(appointmentrequest);
-//
-//		if (response.isSuccess()) {
-//			return ResponseEntity.ok(response);
-//		} else {
-//			return ResponseEntity.badRequest().body(response);
-//		}
+//	public Object saveAppointment(@RequestBody Appointmentrequest appointmentrequest) throws BadRequestException {
+//		return (appointmentservice.saveAppointment(appointmentrequest));
 //	}
 
+	@PostMapping("/saveAppointment")
+	public ResponseEntity<Commonresponse<?>> saveAppointment(@RequestBody Appointmentrequest appointmentrequest)
+			throws BadRequestException {
+		Commonresponse<?> response = (Commonresponse<?>) appointmentservice.saveAppointment(appointmentrequest);
+		return ResponseEntity.ok(response);
+	}
 
 	@DeleteMapping("/delete")
 	public ResponseEntity<?> deleteAppointment(@RequestBody AppointmentDeleterequest request) {

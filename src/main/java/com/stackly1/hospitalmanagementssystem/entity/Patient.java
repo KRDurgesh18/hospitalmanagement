@@ -2,6 +2,8 @@ package com.stackly1.hospitalmanagementssystem.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +21,8 @@ public class Patient {
 	private int age;
 	private String Gender;
 	private String ph_number;
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "patient_id")
 	private List<Appointment> appointments;
 

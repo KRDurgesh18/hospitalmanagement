@@ -62,6 +62,7 @@ public class AppointmentserviceImp implements Appointmentservice {
 //	}
 
 	@Override
+	@Transactional
 	public Commonresponse<?> saveAppointment(Appointmentrequest appointmentrequest) throws BadRequestException {
 
 		if (appointmentrequest.getDoctorId() == null || appointmentrequest.getPatientId() == null) {
@@ -85,9 +86,16 @@ public class AppointmentserviceImp implements Appointmentservice {
 		appointment.setDoctor_id(doctor);
 		appointment.setPatient_id(patient);
 		appointment.setAppointment_date(appointmentrequest.getAppointmentDate());
-		appointmentrepository.save(appointment);
+		Appointment savedAppointment = appointmentrepository.save(appointment);
 
-		return new Commonresponse<>(true, "Appointment details saved successfully", appointment);
+		Appointmentresponse response = new Appointmentresponse();
+		response.setId(savedAppointment.getId());
+		response.setStatus(savedAppointment.getStatus());
+		response.setAppointment_date(savedAppointment.getAppointment_date());
+		response.setDoctor_id(savedAppointment.getDoctor_id().getId());
+		response.setPatient_id(savedAppointment.getPatient_id().getId());
+
+		return new Commonresponse<>(true, "Appointment details saved successfully", response);
 	}
 
 	@Override
